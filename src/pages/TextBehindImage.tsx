@@ -85,28 +85,28 @@ export default function TextBehindImage() {
       canvas.width = img.width
       canvas.height = img.height
 
-      ctx.drawImage(img, 0, 0)
-      ctx.save()
+      // ctx.drawImage(img, 0, 0)
+      // ctx.save()
 
-      textLayers.forEach(layer => {
-        const { text, fontSize, textColor, textX, textY, selectedFont, fontWeight, textRotation } = layer
+      // textLayers.forEach(layer => {
+      //   const { text, fontSize, textColor, textX, textY, selectedFont, fontWeight, textRotation } = layer
 
-        // Apply rotation
-        const x = (textX / 100) * canvas.width
-        const y = (textY / 100) * canvas.height
-        ctx.save()
-        ctx.translate(x, y)
-        ctx.rotate((textRotation * Math.PI) / 180)
-        ctx.translate(-x, -y)
+      //   // Apply rotation
+      //   const x = (textX / 100) * canvas.width
+      //   const y = (textY / 100) * canvas.height
+      //   ctx.save()
+      //   ctx.translate(x, y)
+      //   ctx.rotate((textRotation * Math.PI) / 180)
+      //   ctx.translate(-x, -y)
 
-        ctx.font = `${fontWeight} ${fontSize}px ${selectedFont}`
-        ctx.fillStyle = textColor
-        ctx.textAlign = 'center'
-        ctx.textBaseline = 'middle'
+      //   ctx.font = `${fontWeight} ${fontSize}px ${selectedFont}`
+      //   ctx.fillStyle = textColor
+      //   ctx.textAlign = 'center'
+      //   ctx.textBaseline = 'middle'
 
-        ctx.fillText(text, x, y)
-        ctx.restore()
-      })
+      //   ctx.fillText(text, x, y)
+      //   ctx.restore()
+      // })
 
       try {
         const imageBlob = await removeBackground(imageUrl)
@@ -120,7 +120,7 @@ export default function TextBehindImage() {
         }
         removedBgImg.src = removedBgImageUrl
       } catch (error) {
-        console.error('Error removing background:', error)
+        console.log('Error removing background:', error)
         setIsLoading(false)
         setCanDownload(true)
       }
@@ -221,7 +221,7 @@ export default function TextBehindImage() {
                           <Slider
                             id={`font-size-${layer.id}`}
                             min={12}
-                            max={200}
+                            max={500}
                             step={1}
                             value={[layer.fontSize]}
                             onValueChange={(value) => handleTextLayerChange(layer.id, { fontSize: value[0] })}
