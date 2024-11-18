@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from "@radix-ui/react-navigation-menu";
-import { cn } from "@/lib/utils";
+import { cn } from "../../../lib/utils";
 import { ImageIcon, LucideHome } from "lucide-react";
 import { UserMenu } from "./user-menu";
 
@@ -37,7 +37,7 @@ export function NavBar() {
                 Text Behind Image
               </Link>
             </NavigationMenuItem>
-            <NavigationMenuItem>
+            {/* <NavigationMenuItem>
               <Link
                 to="/image-editor"
                 className={cn(
@@ -46,7 +46,7 @@ export function NavBar() {
               >
                 Image Editor
               </Link>
-            </NavigationMenuItem>
+            </NavigationMenuItem> */}
 
             <NavigationMenuItem>
               <Link

@@ -1,18 +1,18 @@
 'use client'
 
 import { useState, useRef, ChangeEvent, useEffect } from 'react'
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button"
-import { Slider } from "@/components/ui/slider"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Input } from "../components/ui/input"
+import { Label } from "../components/ui/label"
+import { Button } from "../components/ui/button"
+import { Slider } from "../components/ui/slider"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select"
 import { Loader2, Download, ImageIcon, Plus, Trash2 } from 'lucide-react'
 import { removeBackground } from '@imgly/background-removal'
-import { Card, CardContent } from "@/components/ui/card"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { TextLayer } from '@/types/TextBehindImage.interface'
-import { FONTS } from '@/lib/utils'
+import { Card, CardContent } from "../components/ui/card"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../components/ui/accordion"
+import { ScrollArea } from "../components/ui/scroll-area"
+import { TextLayer } from '../types/TextBehindImage.interface'
+import { FONTS } from '../lib/utils'
 
 export default function TextBehindImage() {
   const [imageUrl, setImageUrl] = useState("")
