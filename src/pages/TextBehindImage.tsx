@@ -130,7 +130,7 @@ const TextBehindImage = () => {
 
   return (
     <>
-      <link rel="canonical" href="https://redesign-image.netlify.app" />
+      <link rel="canonical" href="https://redesign-image.netlify.app/text-behind-image" />
       <div className="min-h-screen bg-background">
         <main className="container mx-auto px-4 py-8 overflow-y-auto">
           <h1 className="text-4xl font-bold mb-4">Text Behind Image Creator</h1>
