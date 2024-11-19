@@ -13,7 +13,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "..
 import { TextLayer } from '../types/TextBehindImage.interface'
 import { FONTS } from '../lib/utils'
 
-export default function TextBehindImage() {
+const TextBehindImage = () => {
   const [imageUrl, setImageUrl] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [canDownload, setCanDownload] = useState(false)
@@ -129,201 +129,212 @@ export default function TextBehindImage() {
   }, [imageUrl, textLayers])
 
   return (
-    <div className="min-h-screen bg-background">
-      <main className="container mx-auto px-4 py-8 overflow-y-auto">
-        <h1 className="text-3xl font-bold mb-2">Text Behind Image</h1>
-        <h4 className="text-sm text-muted-foreground mb-8">
-          Upload an image and add text layers to create a text-behind-image effect.
-        </h4>
-        <div className="flex flex-col lg:flex-row gap-8">
-          <div className={`w-full ${imageUrl ? 'lg:w-1/2' : ''} space-y-4`}>
-            <div className={`w-full relative rounded-lg overflow-hidden bg-card shadow-lg ${imageUrl ? 'aspect-video' : 'aspect-[3/2]'}`}>
-              {imageUrl ? (
-                <>
-                  <canvas
-                    ref={canvasRef}
-                    className="absolute inset-0 w-full h-full object-contain"
-                  />
-                  {isLoading && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-                      <Loader2 className="w-8 h-8 text-white animate-spin" />
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
-                  <ImageIcon className="w-16 h-16 text-muted-foreground mb-4" />
-                  <p className="text-center text-muted-foreground mb-4">
-                    No image uploaded. Upload an image to start adding text layers and creating your design.
-                  </p>
-                  <Input
-                    id="image-upload"
-                    type="file"
-                    accept="image/jpg, image/jpeg, image/png"
-                    onChange={handleImageUpload}
-                    className="hidden"
-                  />
+    <>
+      <link rel="canonical" href="https://redesign-image.netlify.app" />
+      <div className="min-h-screen bg-background">
+        <main className="container mx-auto px-4 py-8 overflow-y-auto">
+          <h1 className="text-4xl font-bold mb-4">Text Behind Image Creator</h1>
+          <p className="text-xl text-muted-foreground mb-8">
+            Upload an image and add text layers to create stunning text-behind-image effects. Perfect for social media posts, marketing materials, and creative projects.
+          </p>
+          <section className="flex flex-col lg:flex-row gap-8">
+            <div className={`w-full ${imageUrl ? 'lg:w-1/2' : ''} space-y-4`}>
+              <h2 className="text-2xl font-semibold mb-4">Image Upload</h2>
+              <div className={`w-full relative rounded-lg overflow-hidden bg-card shadow-lg ${imageUrl ? 'aspect-video' : 'aspect-[3/2]'}`}>
+                {imageUrl ? (
+                  <>
+                    <canvas
+                      ref={canvasRef}
+                      className="absolute inset-0 w-full h-full object-contain"
+                      aria-label="Canvas displaying the image with text layers"
+                    />
+                    {isLoading && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+                        <Loader2 className="w-8 h-8 text-white animate-spin" />
+                        <span className="sr-only">Loading image...</span>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
+                    <ImageIcon className="w-16 h-16 text-muted-foreground mb-4" aria-hidden="true" />
+                    <p className="text-center text-muted-foreground mb-4">
+                      No image uploaded. Upload an image to start adding text layers and creating your design.
+                    </p>
+                    <Input
+                      id="image-upload"
+                      type="file"
+                      accept="image/jpg, image/jpeg, image/png"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                      aria-label="Upload an image"
+                    />
+                    <Button
+                      onClick={() => document.getElementById('image-upload')?.click()}
+                      className="w-full max-w-xs"
+                    >
+                      Choose Image
+                    </Button>
+                  </div>
+                )}
+              </div>
+              {imageUrl && (
+                <div className="flex gap-4">
                   <Button
-                    onClick={() => document.getElementById('image-upload')?.click()}
-                    className="w-full max-w-xs"
+                    onClick={handleRemoveImage}
+                    variant="secondary"
+                    className="flex-1"
                   >
-                    Choose Image
+                    Remove Image
+                  </Button>
+                  <Button
+                    onClick={handleDownload}
+                    disabled={!canDownload}
+                    className="flex-1"
+                  >
+                    <Download className="w-4 h-4 mr-2" aria-hidden="true" />
+                    Download Image
                   </Button>
                 </div>
               )}
             </div>
+            
             {imageUrl && (
-              <div className="flex gap-4">
-                <Button
-                  onClick={handleRemoveImage}
-                  variant="secondary"
-                  className="flex-1"
-                >
-                  Remove Image
+              <div className="w-full lg:w-1/2 space-y-4">
+                <h2 className="text-2xl font-semibold mb-4">Text Layers</h2>
+                <Button onClick={handleAddTextLayer} className="w-full">
+                  <Plus className="w-4 h-4 mr-2" aria-hidden="true" />
+                  Add Text Layer
                 </Button>
-                <Button
-                  onClick={handleDownload}
-                  disabled={!canDownload}
-                  className="flex-1"
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  Download Image
-                </Button>
+                <Accordion type="single" collapsible className="w-full">
+                  {textLayers.map((layer, index) => (
+                    <AccordionItem value={layer.id} key={layer.id}>
+                      <AccordionTrigger>Text Layer {index + 1}</AccordionTrigger>
+                      <AccordionContent>
+                        <Card>
+                          <CardContent className="pt-6 space-y-4">
+                            <div className="space-y-2">
+                              <Label htmlFor={`text-input-${layer.id}`}>Text</Label>
+                              <Input
+                                id={`text-input-${layer.id}`}
+                                type="text"
+                                value={layer.text}
+                                onChange={(e) => handleTextLayerChange(layer.id, { text: e.target.value })}
+                              />
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label htmlFor={`font-size-${layer.id}`}>Font Size</Label>
+                              <Slider
+                                id={`font-size-${layer.id}`}
+                                min={12}
+                                max={500}
+                                step={1}
+                                value={[layer.fontSize]}
+                                onValueChange={(value) => handleTextLayerChange(layer.id, { fontSize: value[0] })}
+                              />
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label htmlFor={`text-color-${layer.id}`}>Text Color</Label>
+                              <Input
+                                id={`text-color-${layer.id}`}
+                                type="color"
+                                value={layer.textColor}
+                                onChange={(e) => handleTextLayerChange(layer.id, { textColor: e.target.value })}
+                                className="h-10 w-full"
+                              />
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label htmlFor={`text-x-${layer.id}`}>Horizontal Position</Label>
+                              <Slider
+                                id={`text-x-${layer.id}`}
+                                min={0}
+                                max={100}
+                                step={1}
+                                value={[layer.textX]}
+                                onValueChange={(value) => handleTextLayerChange(layer.id, { textX: value[0] })}
+                              />
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label htmlFor={`text-y-${layer.id}`}>Vertical Position</Label>
+                              <Slider
+                                id={`text-y-${layer.id}`}
+                                min={0}
+                                max={100}
+                                step={1}
+                                value={[layer.textY]}
+                                onValueChange={(value) => handleTextLayerChange(layer.id, { textY: value[0] })}
+                              />
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label htmlFor={`text-rotation-${layer.id}`}>Text Rotation</Label>
+                              <Slider
+                                id={`text-rotation-${layer.id}`}
+                                min={0}
+                                max={360}
+                                step={1}
+                                value={[layer.textRotation]}
+                                onValueChange={(value) => handleTextLayerChange(layer.id, { textRotation: value[0] })}
+                              />
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label htmlFor={`font-select-${layer.id}`}>Font</Label>
+                              <Select 
+                                onValueChange={(value) => handleTextLayerChange(layer.id, { selectedFont: value })} 
+                                value={layer.selectedFont}
+                              >
+                                <SelectTrigger className="w-full">
+                                  <SelectValue placeholder="Select a font" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {FONTS.map((font) => (
+                                    <SelectItem key={font.name} value={font.style}>
+                                      <span style={{ fontFamily: font.style }}>{font.name}</span>
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label htmlFor={`font-weight-${layer.id}`}>Font Weight</Label>
+                              <Slider
+                                id={`font-weight-${layer.id}`}
+                                min={100}
+                                max={900}
+                                step={100}
+                                value={[layer.fontWeight]}
+                                onValueChange={(value) => handleTextLayerChange(layer.id, { fontWeight: value[0] })}
+                              />
+                            </div>
+
+                            <Button 
+                              variant="destructive" 
+                              onClick={() => handleRemoveTextLayer(layer.id)}
+                              className="w-full"
+                            >
+                              <Trash2 className="w-4 h-4 mr-2" aria-hidden="true" />
+                              Remove Layer
+                            </Button>
+                          </CardContent>
+                        </Card>
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
               </div>
             )}
-          </div>
-          
-          {imageUrl && (
-            <div className="w-full lg:w-1/2 space-y-4">
-              <Button onClick={handleAddTextLayer} className="w-full">
-                <Plus className="w-4 h-4 mr-2" />
-                Add Text Layer
-              </Button>
-              <Accordion type="single" collapsible className="w-full">
-                {textLayers.map((layer, index) => (
-                  <AccordionItem value={layer.id} key={layer.id}>
-                    <AccordionTrigger>Text Layer {index + 1}</AccordionTrigger>
-                    <AccordionContent>
-                      <Card>
-                        <CardContent className="pt-6 space-y-4">
-                          <div className="space-y-2">
-                            <Label htmlFor={`text-input-${layer.id}`}>Text</Label>
-                            <Input
-                              id={`text-input-${layer.id}`}
-                              type="text"
-                              value={layer.text}
-                              onChange={(e) => handleTextLayerChange(layer.id, { text: e.target.value })}
-                            />
-                          </div>
-
-                          <div className="space-y-2">
-                            <Label htmlFor={`font-size-${layer.id}`}>Font Size</Label>
-                            <Slider
-                              id={`font-size-${layer.id}`}
-                              min={12}
-                              max={500}
-                              step={1}
-                              value={[layer.fontSize]}
-                              onValueChange={(value) => handleTextLayerChange(layer.id, { fontSize: value[0] })}
-                            />
-                          </div>
-
-                          <div className="space-y-2">
-                            <Label htmlFor={`text-color-${layer.id}`}>Text Color</Label>
-                            <Input
-                              id={`text-color-${layer.id}`}
-                              type="color"
-                              value={layer.textColor}
-                              onChange={(e) => handleTextLayerChange(layer.id, { textColor: e.target.value })}
-                              className="h-10 w-full"
-                            />
-                          </div>
-
-                          <div className="space-y-2">
-                            <Label htmlFor={`text-x-${layer.id}`}>Horizontal Position</Label>
-                            <Slider
-                              id={`text-x-${layer.id}`}
-                              min={0}
-                              max={100}
-                              step={1}
-                              value={[layer.textX]}
-                              onValueChange={(value) => handleTextLayerChange(layer.id, { textX: value[0] })}
-                            />
-                          </div>
-
-                          <div className="space-y-2">
-                            <Label htmlFor={`text-y-${layer.id}`}>Vertical Position</Label>
-                            <Slider
-                              id={`text-y-${layer.id}`}
-                              min={0}
-                              max={100}
-                              step={1}
-                              value={[layer.textY]}
-                              onValueChange={(value) => handleTextLayerChange(layer.id, { textY: value[0] })}
-                            />
-                          </div>
-
-                          <div className="space-y-2">
-                            <Label htmlFor={`text-rotation-${layer.id}`}>Text Rotation</Label>
-                            <Slider
-                              id={`text-rotation-${layer.id}`}
-                              min={0}
-                              max={360}
-                              step={1}
-                              value={[layer.textRotation]}
-                              onValueChange={(value) => handleTextLayerChange(layer.id, { textRotation: value[0] })}
-                            />
-                          </div>
-
-                          <div className="space-y-2">
-                            <Label htmlFor={`font-select-${layer.id}`}>Font</Label>
-                            <Select 
-                              onValueChange={(value) => handleTextLayerChange(layer.id, { selectedFont: value })} 
-                              value={layer.selectedFont}
-                            >
-                              <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Select a font" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {FONTS.map((font) => (
-                                  <SelectItem key={font.name} value={font.style}>
-                                    <span style={{ fontFamily: font.style }}>{font.name}</span>
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </div>
-
-                          <div className="space-y-2">
-                            <Label htmlFor={`font-weight-${layer.id}`}>Font Weight</Label>
-                            <Slider
-                              id={`font-weight-${layer.id}`}
-                              min={100}
-                              max={900}
-                              step={100}
-                              value={[layer.fontWeight]}
-                              onValueChange={(value) => handleTextLayerChange(layer.id, { fontWeight: value[0] })}
-                            />
-                          </div>
-
-                          <Button 
-                            variant="destructive" 
-                            onClick={() => handleRemoveTextLayer(layer.id)}
-                            className="w-full"
-                          >
-                            <Trash2 className="w-4 h-4 mr-2" />
-                            Remove Layer
-                          </Button>
-                        </CardContent>
-                      </Card>
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </div>
-          )}
-        </div>
-      </main>
-    </div>
+          </section>
+        </main>
+      </div>
+    </>
   )
 }
+
+// const TextBehindImageWithAuth = withAuth(TextBehindImage);
+export default TextBehindImage;
